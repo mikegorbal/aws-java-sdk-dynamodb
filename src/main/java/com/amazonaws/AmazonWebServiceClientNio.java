@@ -35,13 +35,13 @@ import com.amazonaws.util.HttpUtils;
  * Responsible for basic client capabilities that are the same across all AWS
  * SDK Java clients (ex: setting the client endpoint).
  */
-public abstract class AmazonWebServiceClient {
+public abstract class AmazonWebServiceClientNio extends AmazonWebServiceClient {
     private static final String AMAZON = "Amazon";
     private static final String AWS = "AWS";
     public static final boolean LOGGING_AWS_REQUEST_METRIC = true;
 
     private static final Log log =
-            LogFactory.getLog(AmazonWebServiceClient.class);
+            LogFactory.getLog(AmazonWebServiceClientNio.class);
     static {
         // Configures the internal logging of the signers and core
         // classes to use Jakarta Commons Logging to stay consistent with the
@@ -96,7 +96,7 @@ public abstract class AmazonWebServiceClient {
      * @param clientConfiguration
      *            The client configuration for this client.
      */
-    public AmazonWebServiceClient(ClientConfiguration clientConfiguration) {
+    public AmazonWebServiceClientNio(ClientConfiguration clientConfiguration) {
         this(clientConfiguration, null);
     }
 
@@ -110,8 +110,9 @@ public abstract class AmazonWebServiceClient {
      *            optional request metric collector to be used at the http
      *            client level; can be null.
      */
-    public AmazonWebServiceClient(ClientConfiguration clientConfiguration,
-                                  RequestMetricCollector requestMetricCollector) {
+    public AmazonWebServiceClientNio(ClientConfiguration clientConfiguration,
+                                     RequestMetricCollector requestMetricCollector) {
+        super(clientConfiguration, requestMetricCollector);
         this.clientConfiguration = clientConfiguration;
         client = new AmazonHttpClient(clientConfiguration, requestMetricCollector);
         requestHandler2s = new CopyOnWriteArrayList<RequestHandler2>();
@@ -311,7 +312,7 @@ public abstract class AmazonWebServiceClient {
     }
 
     /**
-     * An alternative to {@link AmazonWebServiceClient#setEndpoint(String)}, sets the regional
+     * An alternative to {@link AmazonWebServiceClientNio#setEndpoint(String)}, sets the regional
      * endpoint for this client's service calls. Callers can use this method to control which AWS
      * region they want to work with.
      * <p>
@@ -346,19 +347,6 @@ public abstract class AmazonWebServiceClient {
             this.endpoint = uri;
             this.signer = signer;
         }
-    }
-
-    /**
-     * Convenient method for setting region.
-     *
-     * @param region region to set to; must not be null.
-     *
-     * @see #setRegion(Region)
-     */
-    public final void configureRegion(Regions region) {
-        if (region == null)
-            throw new IllegalArgumentException("No region provided");
-        this.setRegion(Region.getRegion(region));
     }
 
     /**
@@ -415,65 +403,15 @@ public abstract class AmazonWebServiceClient {
         requestHandler2s.remove(requestHandler2);
     }
 
-    /**
-     * Runs the {@code beforeMarshalling} method of any
-     * {@code RequestHandler2}s associated with this client.
-     *
-     * @param request the request passed in from the user
-     * @return the (possibly different) request to marshal
-     */
-    @SuppressWarnings("unchecked")
-    protected final <T extends AmazonWebServiceRequest> T beforeMarshalling(
-            T request) {
-
-        T local = request;
-        for (RequestHandler2 handler : requestHandler2s) {
-            local = (T) handler.beforeMarshalling(local);
-        }
-        return local;
-    }
 
     protected ExecutionContext createExecutionContext(AmazonWebServiceRequest req) {
         boolean isMetricsEnabled = isRequestMetricsEnabled(req) || isProfilingEnabled();
         return new ExecutionContext(requestHandler2s, isMetricsEnabled, this);
     }
 
-    protected final ExecutionContext createExecutionContext(Request<?> req) {
-        return createExecutionContext(req.getOriginalRequest());
-    }
-
-    /**
-     * @deprecated by {@link #createExecutionContext(AmazonWebServiceRequest)}.
-     *
-     *             This method exists only for backward compatiblity reason, so
-     *             that clients compiled against the older version of this class
-     *             won't get {@link NoSuchMethodError} at runtime. However,
-     *             calling this methods would effectively ignore and disable the
-     *             request metric collector, if any, specified at the request
-     *             level. Request metric collector specified at the service
-     *             client or AWS SDK level will still be honored.
-     */
-    @Deprecated
-    protected final ExecutionContext createExecutionContext() {
-        boolean isMetricsEnabled = isRMCEnabledAtClientOrSdkLevel() || isProfilingEnabled();
-        return new ExecutionContext(requestHandler2s, isMetricsEnabled, this);
-    }
-
     /* Check the profiling system property and return true if set */
     protected static boolean isProfilingEnabled() {
         return System.getProperty(PROFILING_SYSTEM_PROPERTY) != null;
-    }
-
-    /**
-     * Returns true if request metric collection is applicable to the given
-     * request; false otherwise.
-     */
-    protected final boolean isRequestMetricsEnabled(AmazonWebServiceRequest req) {
-        RequestMetricCollector c = req.getRequestMetricCollector(); // request level collector
-        if (c != null && c.isEnabled()) {
-            return true;
-        }
-        return isRMCEnabledAtClientOrSdkLevel();
     }
 
     /**
@@ -509,7 +447,7 @@ public abstract class AmazonWebServiceClient {
      *
      * @return the updated web service client
      */
-    public AmazonWebServiceClient withTimeOffset(int timeOffset) {
+    public AmazonWebServiceClientNio withTimeOffset(int timeOffset) {
         setTimeOffset(timeOffset);
         return this;
     }
@@ -543,50 +481,7 @@ public abstract class AmazonWebServiceClient {
         return mc == null ? AwsSdkMetrics.getRequestMetricCollector() : mc;
     }
 
-    /**
-     * Returns the most specific request metric collector, starting from the
-     * request level, then client level, then finally the AWS SDK level.
-     */
-    protected final RequestMetricCollector findRequestMetricCollector(Request<?> req) {
-        AmazonWebServiceRequest origReq = req.getOriginalRequest();
-        RequestMetricCollector mc = origReq.getRequestMetricCollector();
-        if (mc != null) {
-            return mc;
-        }
-        mc = getRequestMetricsCollector();
-        return mc == null ? AwsSdkMetrics.getRequestMetricCollector() : mc;
-    }
 
-    /**
-     * Convenient method to end the client execution without logging the
-     * awsRequestMetrics.
-     */
-    protected final void endClientExecution(
-            AWSRequestMetrics awsRequestMetrics, Request<?> request,
-            Response<?> response) {
-        this.endClientExecution(awsRequestMetrics, request, response,
-                !LOGGING_AWS_REQUEST_METRIC);
-    }
-
-    /**
-     * Common routine to end a client AWS request/response execution and collect
-     * the request metrics.  Caller of this routine is responsible for starting
-     * the event for {@link Field#ClientExecuteTime} and call this method
-     * in a try-finally block.
-     *
-     * @param loggingAwsRequestMetrics deprecated and ignored
-     */
-    protected final void endClientExecution(
-            AWSRequestMetrics awsRequestMetrics, Request<?> request,
-            Response<?> response, @Deprecated boolean loggingAwsRequestMetrics) {
-        if (request != null) {
-            awsRequestMetrics.endEvent(Field.ClientExecuteTime);
-            awsRequestMetrics.getTimingInfo().endTiming();
-            RequestMetricCollector c = findRequestMetricCollector(request);
-            c.collectMetrics(request, response);
-            awsRequestMetrics.log();
-        }
-    }
 
     /**
      * @deprecated by {@link #getServiceName()}.
@@ -643,21 +538,9 @@ public abstract class AmazonWebServiceClient {
     }
 
     /**
-     * An internal method used to explicitly override the service name
-     * computed by the default implementation. This method is not expected to be
-     * normally called except for AWS internal development purposes.
-     */
-    public final void setServiceNameIntern(String serviceName) {
-        if (serviceName == null)
-            throw new IllegalArgumentException(
-                    "The parameter serviceName must be specified!");
-        this.serviceName = serviceName;
-    }
-
-    /**
      * Returns the service name of this AWS http client by first looking it up
      * from the SDK internal configuration, and if not found, derive it from the
-     * class name of the immediate subclass of {@link AmazonWebServiceClient}.
+     * class name of the immediate subclass of {@link AmazonWebServiceClientNio}.
      * No configuration is necessary if the simple class name of the http client
      * follows the convention of <code>(Amazon|AWS).*(JavaClient|Client)</code>.
      */
@@ -700,71 +583,10 @@ public abstract class AmazonWebServiceClient {
 
     private String getHttpClientName() {
         Class<?> httpClientClass = Classes.childClassOf(
-                AmazonWebServiceClient.class, this);
+                AmazonWebServiceClientNio.class, this);
         return httpClientClass.getSimpleName();
     }
 
-    /**
-     * Returns the signer region override.
-     *
-     * @see #setSignerRegionOverride(String).
-     */
-    public final String getSignerRegionOverride() {
-        return signerRegionOverride;
-    }
 
-    /**
-     * An internal method used to explicitly override the internal signer region
-     * computed by the default implementation. This method is not expected to be
-     * normally called except for AWS internal development purposes.
-     */
-    public final void setSignerRegionOverride(String signerRegionOverride) {
-        Signer signer = computeSignerByURI(endpoint, signerRegionOverride, true);
-        synchronized(this)  {
-            this.signer = signer;
-            this.signerRegionOverride = signerRegionOverride;
-        }
-    }
 
-    /**
-     * Fluent method for {@link #setRegion(Region)}.
-     *<pre>
-     * Example:
-     *
-     *   AmazonDynamoDBClient client = new AmazonDynamoDBClient(...).<AmazonDynamoDBClient>withRegion(...);
-     *</pre>
-     * @see #setRegion(Region)
-     */
-    public <T extends AmazonWebServiceClient> T withRegion(Region region) {
-        setRegion(region);
-        @SuppressWarnings("unchecked") T t= (T)this;
-        return t;
-    }
-
-    /**
-     * Convenient fluent method for setting region.
-     *
-     * @param region region to set to; must not be null.
-     *
-     * @see #withRegion(Region)
-     */
-    public <T extends AmazonWebServiceClient> T withRegion(Regions region) {
-        configureRegion(region);
-        @SuppressWarnings("unchecked") T t= (T)this;
-        return t;
-    }
-    /**
-     * Fluent method for {@link #setEndpoint(String)}.
-     *<pre>
-     * Example:
-     *
-     *   AmazonDynamoDBClient client = new AmazonDynamoDBClient(...).<AmazonDynamoDBClient>withEndPoint(...);
-     *</pre>
-     * @see #setEndpoint(String)
-     */
-    public <T extends AmazonWebServiceClient> T withEndpoint(String endpoint) {
-        setEndpoint(endpoint);
-        @SuppressWarnings("unchecked") T t= (T)this;
-        return t;
-    }
 }

@@ -23,7 +23,7 @@ import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.internal.StaticCredentialsProvider;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientNio;
 import com.amazonaws.services.s3.model.Region;
 
 public class S3LinkTest
@@ -33,7 +33,7 @@ public class S3LinkTest
     @Before
     public void setUp() {
         AWSCredentials credentials = new BasicAWSCredentials("mock", "mock");
-        AmazonDynamoDB db = new AmazonDynamoDBClient(credentials);
+        AmazonDynamoDB db = new AmazonDynamoDBClientNio(credentials);
         mapper = new DynamoDBMapper(db, new StaticCredentialsProvider(credentials));
     }
 

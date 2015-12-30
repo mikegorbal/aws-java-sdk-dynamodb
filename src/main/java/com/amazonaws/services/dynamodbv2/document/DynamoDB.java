@@ -21,7 +21,7 @@ import org.apache.http.annotation.ThreadSafe;
 
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientNio;
 import com.amazonaws.services.dynamodbv2.document.api.BatchGetItemApi;
 import com.amazonaws.services.dynamodbv2.document.api.BatchWriteItemApi;
 import com.amazonaws.services.dynamodbv2.document.api.ListTablesApi;
@@ -68,18 +68,18 @@ public class DynamoDB implements ListTablesApi, BatchGetItemApi,
      * Create a DynamoDB object that talks to the specified AWS region. The
      * underlying service client will use all the default client configurations,
      * including the default credentials provider chain. See
-     * {@link AmazonDynamoDBClient#AmazonDynamoDBClient()} for more information.
+     * {@link AmazonDynamoDBClientNio#AmazonDynamoDBClientNio()} for more information.
      * <p>
      * If you need more control over the client configuration, use
      * {@link DynamoDB#DynamoDB(AmazonDynamoDB)} instead.
      *
      * @param regionEnum
      *            the AWS region enum
-     * @see AmazonDynamoDBClient#AmazonDynamoDBClient()
+     * @see AmazonDynamoDBClientNio#AmazonDynamoDBClientNio()
      */
     public DynamoDB(Regions regionEnum) {
-        this(new AmazonDynamoDBClient()
-                .<AmazonDynamoDBClient>withRegion(regionEnum));
+        this(new AmazonDynamoDBClientNio()
+                .<AmazonDynamoDBClientNio>withRegion(regionEnum));
     }
 
     /**
