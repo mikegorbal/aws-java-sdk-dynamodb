@@ -2,12 +2,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>DynamoClienNIO</groupId>
-    <version>1.10.21-SNAPSHOT</version>
     <artifactId>aws-java-sdk-dynamodb</artifactId>
     <name>AWS Java SDK for Amazon DynamoDB</name>
     <description>The AWS Java SDK for Amazon DynamoDB module holds the client classes that are used for communicating
         with Amazon DynamoDB Service
     </description>
+    <version>0.2-SNAPSHOT</version>
+    <packaging>jar</packaging>
     <dependencies>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
