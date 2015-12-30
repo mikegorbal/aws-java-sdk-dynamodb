@@ -93,7 +93,7 @@ import com.amazonaws.services.dynamodbv2.model.transform.*;
  * </li>
  * </ul>
  */
-public class AmazonDynamoDBStreamsClientNio extends AmazonWebServiceClientNio
+public class AmazonDynamoDBStreamsClient extends AmazonWebServiceClientNio
         implements AmazonDynamoDBStreams {
     /** Provider for AWS credentials. */
     private AWSCredentialsProvider awsCredentialsProvider;
@@ -127,7 +127,7 @@ public class AmazonDynamoDBStreamsClientNio extends AmazonWebServiceClientNio
      *
      * @see DefaultAWSCredentialsProviderChain
      */
-    public AmazonDynamoDBStreamsClientNio() {
+    public AmazonDynamoDBStreamsClient() {
         this(new DefaultAWSCredentialsProviderChain(),
                 com.amazonaws.PredefinedClientConfigurations.defaultConfig());
     }
@@ -154,7 +154,7 @@ public class AmazonDynamoDBStreamsClientNio extends AmazonWebServiceClientNio
      *
      * @see DefaultAWSCredentialsProviderChain
      */
-    public AmazonDynamoDBStreamsClientNio(ClientConfiguration clientConfiguration) {
+    public AmazonDynamoDBStreamsClient(ClientConfiguration clientConfiguration) {
         this(new DefaultAWSCredentialsProviderChain(), clientConfiguration);
     }
 
@@ -170,7 +170,7 @@ public class AmazonDynamoDBStreamsClientNio extends AmazonWebServiceClientNio
      *        The AWS credentials (access key ID and secret key) to use when
      *        authenticating with AWS services.
      */
-    public AmazonDynamoDBStreamsClientNio(AWSCredentials awsCredentials) {
+    public AmazonDynamoDBStreamsClient(AWSCredentials awsCredentials) {
         this(awsCredentials, com.amazonaws.PredefinedClientConfigurations
                 .defaultConfig());
     }
@@ -192,8 +192,8 @@ public class AmazonDynamoDBStreamsClientNio extends AmazonWebServiceClientNio
      *        connects to Amazon DynamoDB Streams (ex: proxy settings, retry
      *        counts, etc.).
      */
-    public AmazonDynamoDBStreamsClientNio(AWSCredentials awsCredentials,
-                                          ClientConfiguration clientConfiguration) {
+    public AmazonDynamoDBStreamsClient(AWSCredentials awsCredentials,
+                                       ClientConfiguration clientConfiguration) {
         super(clientConfiguration);
         this.awsCredentialsProvider = new StaticCredentialsProvider(
                 awsCredentials);
@@ -212,7 +212,7 @@ public class AmazonDynamoDBStreamsClientNio extends AmazonWebServiceClientNio
      *        The AWS credentials provider which will provide credentials to
      *        authenticate requests with AWS services.
      */
-    public AmazonDynamoDBStreamsClientNio(
+    public AmazonDynamoDBStreamsClient(
             AWSCredentialsProvider awsCredentialsProvider) {
         this(awsCredentialsProvider,
                 com.amazonaws.PredefinedClientConfigurations.defaultConfig());
@@ -235,7 +235,7 @@ public class AmazonDynamoDBStreamsClientNio extends AmazonWebServiceClientNio
      *        connects to Amazon DynamoDB Streams (ex: proxy settings, retry
      *        counts, etc.).
      */
-    public AmazonDynamoDBStreamsClientNio(
+    public AmazonDynamoDBStreamsClient(
             AWSCredentialsProvider awsCredentialsProvider,
             ClientConfiguration clientConfiguration) {
         this(awsCredentialsProvider, clientConfiguration, null);
@@ -260,7 +260,7 @@ public class AmazonDynamoDBStreamsClientNio extends AmazonWebServiceClientNio
      * @param requestMetricCollector
      *        optional request metric collector
      */
-    public AmazonDynamoDBStreamsClientNio(
+    public AmazonDynamoDBStreamsClient(
             AWSCredentialsProvider awsCredentialsProvider,
             ClientConfiguration clientConfiguration,
             RequestMetricCollector requestMetricCollector) {

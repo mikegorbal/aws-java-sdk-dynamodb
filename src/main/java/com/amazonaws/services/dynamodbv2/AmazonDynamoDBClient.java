@@ -205,7 +205,7 @@ import com.amazonaws.services.dynamodbv2.model.transform.*;
  * >Query and Scan Operations</a> in the <i>Amazon DynamoDB Developer Guide</i>.
  * </p>
  */
-public class AmazonDynamoDBClientNio extends AmazonWebServiceClientNio implements
+public class AmazonDynamoDBClient extends AmazonWebServiceClientNio implements
         AmazonDynamoDB {
     // register the service specific set of predefined metrics
     static {
@@ -244,7 +244,7 @@ public class AmazonDynamoDBClientNio extends AmazonWebServiceClientNio implement
      *
      * @see DefaultAWSCredentialsProviderChain
      */
-    public AmazonDynamoDBClientNio() {
+    public AmazonDynamoDBClient() {
         this(new DefaultAWSCredentialsProviderChain(),
                 com.amazonaws.PredefinedClientConfigurations.dynamoDefault());
     }
@@ -270,7 +270,7 @@ public class AmazonDynamoDBClientNio extends AmazonWebServiceClientNio implement
      *
      * @see DefaultAWSCredentialsProviderChain
      */
-    public AmazonDynamoDBClientNio(ClientConfiguration clientConfiguration) {
+    public AmazonDynamoDBClient(ClientConfiguration clientConfiguration) {
         this(new DefaultAWSCredentialsProviderChain(), clientConfiguration);
     }
 
@@ -286,7 +286,7 @@ public class AmazonDynamoDBClientNio extends AmazonWebServiceClientNio implement
      *        The AWS credentials (access key ID and secret key) to use when
      *        authenticating with AWS services.
      */
-    public AmazonDynamoDBClientNio(AWSCredentials awsCredentials) {
+    public AmazonDynamoDBClient(AWSCredentials awsCredentials) {
         this(awsCredentials, com.amazonaws.PredefinedClientConfigurations
                 .dynamoDefault());
     }
@@ -306,8 +306,8 @@ public class AmazonDynamoDBClientNio extends AmazonWebServiceClientNio implement
      *        The client configuration options controlling how this client
      *        connects to DynamoDB (ex: proxy settings, retry counts, etc.).
      */
-    public AmazonDynamoDBClientNio(AWSCredentials awsCredentials,
-                                   ClientConfiguration clientConfiguration) {
+    public AmazonDynamoDBClient(AWSCredentials awsCredentials,
+                                ClientConfiguration clientConfiguration) {
         super(clientConfiguration);
         this.awsCredentialsProvider = new StaticCredentialsProvider(
                 awsCredentials);
@@ -326,7 +326,7 @@ public class AmazonDynamoDBClientNio extends AmazonWebServiceClientNio implement
      *        The AWS credentials provider which will provide credentials to
      *        authenticate requests with AWS services.
      */
-    public AmazonDynamoDBClientNio(AWSCredentialsProvider awsCredentialsProvider) {
+    public AmazonDynamoDBClient(AWSCredentialsProvider awsCredentialsProvider) {
         this(awsCredentialsProvider,
                 com.amazonaws.PredefinedClientConfigurations.dynamoDefault());
     }
@@ -347,8 +347,8 @@ public class AmazonDynamoDBClientNio extends AmazonWebServiceClientNio implement
      *        The client configuration options controlling how this client
      *        connects to DynamoDB (ex: proxy settings, retry counts, etc.).
      */
-    public AmazonDynamoDBClientNio(AWSCredentialsProvider awsCredentialsProvider,
-                                   ClientConfiguration clientConfiguration) {
+    public AmazonDynamoDBClient(AWSCredentialsProvider awsCredentialsProvider,
+                                ClientConfiguration clientConfiguration) {
         this(awsCredentialsProvider, clientConfiguration, null);
     }
 
@@ -370,9 +370,9 @@ public class AmazonDynamoDBClientNio extends AmazonWebServiceClientNio implement
      * @param requestMetricCollector
      *        optional request metric collector
      */
-    public AmazonDynamoDBClientNio(AWSCredentialsProvider awsCredentialsProvider,
-                                   ClientConfiguration clientConfiguration,
-                                   RequestMetricCollector requestMetricCollector) {
+    public AmazonDynamoDBClient(AWSCredentialsProvider awsCredentialsProvider,
+                                ClientConfiguration clientConfiguration,
+                                RequestMetricCollector requestMetricCollector) {
         super(clientConfiguration, requestMetricCollector);
         this.awsCredentialsProvider = awsCredentialsProvider;
         init();

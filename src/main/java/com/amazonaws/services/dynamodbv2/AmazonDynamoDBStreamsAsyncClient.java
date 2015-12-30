@@ -79,8 +79,8 @@ import com.amazonaws.services.dynamodbv2.model.*;
  * </li>
  * </ul>
  */
-public class AmazonDynamoDBStreamsAsyncClientNio extends
-        AmazonDynamoDBStreamsClientNio implements AmazonDynamoDBStreamsAsync {
+public class AmazonDynamoDBStreamsAsyncClient extends
+        AmazonDynamoDBStreamsClient implements AmazonDynamoDBStreamsAsync {
 
     private static final int DEFAULT_THREAD_POOL_SIZE = 50;
 
@@ -106,7 +106,7 @@ public class AmazonDynamoDBStreamsAsyncClientNio extends
      * @see com.amazonaws.auth.DefaultAWSCredentialsProviderChain
      * @see java.util.concurrent.Executors#newFixedThreadPool(int)
      */
-    public AmazonDynamoDBStreamsAsyncClientNio() {
+    public AmazonDynamoDBStreamsAsyncClient() {
         this(new com.amazonaws.auth.DefaultAWSCredentialsProviderChain());
     }
 
@@ -135,7 +135,7 @@ public class AmazonDynamoDBStreamsAsyncClientNio extends
      * @see com.amazonaws.auth.DefaultAWSCredentialsProviderChain
      * @see java.util.concurrent.Executors#newFixedThreadPool(int)
      */
-    public AmazonDynamoDBStreamsAsyncClientNio(
+    public AmazonDynamoDBStreamsAsyncClient(
             com.amazonaws.ClientConfiguration clientConfiguration) {
         this(new com.amazonaws.auth.DefaultAWSCredentialsProviderChain(),
                 clientConfiguration, java.util.concurrent.Executors
@@ -156,7 +156,7 @@ public class AmazonDynamoDBStreamsAsyncClientNio extends
      *        authenticating with AWS services.
      * @see java.util.concurrent.Executors#newFixedThreadPool(int)
      */
-    public AmazonDynamoDBStreamsAsyncClientNio(
+    public AmazonDynamoDBStreamsAsyncClient(
             com.amazonaws.auth.AWSCredentials awsCredentials) {
         this(awsCredentials, java.util.concurrent.Executors
                 .newFixedThreadPool(DEFAULT_THREAD_POOL_SIZE));
@@ -174,7 +174,7 @@ public class AmazonDynamoDBStreamsAsyncClientNio extends
      *        The executor service by which all asynchronous requests will be
      *        executed.
      */
-    public AmazonDynamoDBStreamsAsyncClientNio(
+    public AmazonDynamoDBStreamsAsyncClient(
             com.amazonaws.auth.AWSCredentials awsCredentials,
             java.util.concurrent.ExecutorService executorService) {
 
@@ -197,7 +197,7 @@ public class AmazonDynamoDBStreamsAsyncClientNio extends
      *        The executor service by which all asynchronous requests will be
      *        executed.
      */
-    public AmazonDynamoDBStreamsAsyncClientNio(
+    public AmazonDynamoDBStreamsAsyncClient(
             com.amazonaws.auth.AWSCredentials awsCredentials,
             com.amazonaws.ClientConfiguration clientConfiguration,
             java.util.concurrent.ExecutorService executorService) {
@@ -220,7 +220,7 @@ public class AmazonDynamoDBStreamsAsyncClientNio extends
      *        authenticate requests with AWS services.
      * @see java.util.concurrent.Executors#newFixedThreadPool(int)
      */
-    public AmazonDynamoDBStreamsAsyncClientNio(
+    public AmazonDynamoDBStreamsAsyncClient(
             com.amazonaws.auth.AWSCredentialsProvider awsCredentialsProvider) {
         this(awsCredentialsProvider, java.util.concurrent.Executors
                 .newFixedThreadPool(DEFAULT_THREAD_POOL_SIZE));
@@ -245,7 +245,7 @@ public class AmazonDynamoDBStreamsAsyncClientNio extends
      * @see com.amazonaws.auth.DefaultAWSCredentialsProviderChain
      * @see java.util.concurrent.Executors#newFixedThreadPool(int)
      */
-    public AmazonDynamoDBStreamsAsyncClientNio(
+    public AmazonDynamoDBStreamsAsyncClient(
             com.amazonaws.auth.AWSCredentialsProvider awsCredentialsProvider,
             com.amazonaws.ClientConfiguration clientConfiguration) {
 
@@ -267,7 +267,7 @@ public class AmazonDynamoDBStreamsAsyncClientNio extends
      *        The executor service by which all asynchronous requests will be
      *        executed.
      */
-    public AmazonDynamoDBStreamsAsyncClientNio(
+    public AmazonDynamoDBStreamsAsyncClient(
             com.amazonaws.auth.AWSCredentialsProvider awsCredentialsProvider,
             java.util.concurrent.ExecutorService executorService) {
 
@@ -290,7 +290,7 @@ public class AmazonDynamoDBStreamsAsyncClientNio extends
      *        The executor service by which all asynchronous requests will be
      *        executed.
      */
-    public AmazonDynamoDBStreamsAsyncClientNio(
+    public AmazonDynamoDBStreamsAsyncClient(
             com.amazonaws.auth.AWSCredentialsProvider awsCredentialsProvider,
             com.amazonaws.ClientConfiguration clientConfiguration,
             java.util.concurrent.ExecutorService executorService) {
